@@ -10,7 +10,7 @@ def main():
     parser.add_argument("-o", "--output", default="", help="Path to the output directory\n"
                                                            "(default: create a directory with the same name as the input video in the input directory)")
     parser.add_argument("-p", "--parent", action="store_true", help="Include the parent directory of the video in the output directory path")
-    parser.add_argument("-h", "--help", action="help", help="Show this help message and exit")
+    parser.add_argument("-H", "--show-help", action="help", help="Show this help message and exit")  # Modified option string
     args = parser.parse_args()
     
     # Use input video directory as output if -o is empty
