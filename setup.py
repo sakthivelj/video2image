@@ -10,6 +10,10 @@ setup(
     packages=find_packages(),
     install_requires=[
         'opencv-python',
-        
     ],
+    entry_points={
+        'console_scripts': [
+            'video2images = video2images.__init__:main'
+        ]
+    }
 )
