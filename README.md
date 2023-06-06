@@ -2,19 +2,16 @@
 Video2Images is a Python script that allows you to extract frames from a video file or multiple video files and save them as individual images. It provides a simple and convenient way to convert videos into a series of images, which can be useful for various applications such as computer vision, machine learning, data analysis, and more.
 
 
-Certainly! Here's a README.md template with an easy-to-copy script format:
-
-```markdown
 # Video to Images Converter
 
-This script allows you to extract frames from a video file or multiple video files and save them as individual images.
+The package allows for frames to be extracted and saved individually from video files.
 
 ## Installation
 
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/your-username/video-to-images-converter.git
+   git clone https://github.com/sakthivelj/video2images.git
    ```
 
 2. Navigate to the project directory:
