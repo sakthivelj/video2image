@@ -1,6 +1,8 @@
 # video2image
 Video2Image is a Python script that extracts frames from a video file or a set of video files and saves them as individual images. It provides a simple and convenient way to convert videos into a series of images. This can be useful for various applications such as computer vision, machine learning, data analysis, and more.
 
+https://pypi.org/project/video2image/
+
 ## Installation
 
 You can install Video2Image using `pip`. Here are the steps to install it:
