@@ -24,7 +24,7 @@ def main():
     
     # Handle directory with multiple video files
     elif os.path.isdir(args.input):
-        video_files = glob.glob(os.path.join(args.input, "*.mp4"))
+        video_files = glob.glob(os.path.join(args.input, "*.[mp4|mkv|avi|mov]"))  # Updated line
         if len(video_files) == 0:
             print("No video files found in the input directory")
         else:
