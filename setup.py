@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='video2image',
-    version='1.3.3-beta',
+    version='1.3.3',
     author='Sakthivel J',
     author_email='sakthivel1023@gmail.com',
     description='A Python script to extract frames from video files.',
