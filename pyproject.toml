@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "video2image"
+version = "1.3.3-beta"
+description = "A Python script to extract frames from video files."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Sakthivel J", email = "sakthivel1023@gmail.com"}
+]
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Video",
+]
+dependencies = [
+    "opencv-python",
+    "tqdm",
+]
+
+[project.urls]
+Homepage = "https://github.com/sakthivelj/video2image"
+Repository = "https://github.com/sakthivelj/video2image"
+Issues = "https://github.com/sakthivelj/video2image/issues"
+
+[project.scripts]
+video2image = "video2image.__init__:main"

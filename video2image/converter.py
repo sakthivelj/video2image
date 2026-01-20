@@ -46,6 +46,9 @@ def extract_frames(video_path, output_folder, include_parent=False, image_format
     # Set up progress bar
     progress_bar = tqdm(total=frame_count, desc="Extracting Frames", unit="frame")
 
+    # Frame counter for sequential naming
+    current_frame = 1
+
     while True:
         # Read the next frame from the video
         ret, frame = video.read()
@@ -55,14 +58,12 @@ def extract_frames(video_path, output_folder, include_parent=False, image_format
             break
 
         # Save the frame as an image
-        frame_path = os.path.join(frame_folder, f"frame_{frame_count:04d}.{image_format}")
+        frame_path = os.path.join(frame_folder, f"frame_{current_frame:04d}.{image_format}")
         cv2.imwrite(frame_path, frame)
 
-        # Update progress bar
+        # Update progress bar and frame counter
         progress_bar.update(1)
-
-        # Decrement frame count
-        frame_count -= 1
+        current_frame += 1
 
     # Release the video object
     video.release()
