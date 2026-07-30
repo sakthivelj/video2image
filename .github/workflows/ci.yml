@@ -34,13 +34,15 @@ jobs:
         pytest tests/ --cov=video2image --cov-report=xml --cov-report=html
     
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         file: ./coverage.xml
         flags: unittests
         env_vars: OS,PYTHON
         name: codecov-umbrella
         fail_ci_if_error: false
+        disable_search: true
+        verbose: true
 
   lint:
     runs-on: ubuntu-latest
@@ -120,11 +122,18 @@ jobs:
         path: dist/
     
     - name: Install twine
-      run: pip install twine
+      run: |
+        python -m pip install --upgrade pip
+        pip install twine
+    
+    - name: Verify twine installation
+      run: |
+        which twine
+        twine --version
     
     - name: Publish to PyPI
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run: |
-        twine upload dist/*
+        python -m twine upload dist/*
