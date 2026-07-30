@@ -34,13 +34,15 @@ jobs:
         pytest tests/ --cov=video2image --cov-report=xml --cov-report=html
     
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         file: ./coverage.xml
         flags: unittests
         env_vars: OS,PYTHON
         name: codecov-umbrella
         fail_ci_if_error: false
+        disable_search: true
+        verbose: true
 
   lint:
     runs-on: ubuntu-latest
