@@ -1,3 +1,19 @@
+Video2Image v2.0.1
+===================
+
+Minor fixes
+-----------
+- Fixed the About dialog showing a duplicated "v" in the version
+  string (e.g. "vv2.0.0" instead of "v2.0.0") — the CI-written VERSION
+  file already includes the "v" from the git tag, and the dialog
+  template was prepending a second one on top of it.
+
+Contact
+-------
+Sakthivel J — sakthivel1023@gmail.com
+https://github.com/sakthivelj/video2image
+
+
 Video2Image v2.0.0
 ===================
 
