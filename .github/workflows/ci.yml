@@ -82,7 +82,7 @@ jobs:
       with:
         python-version: '3.11'
     
-    - name: Install build tools
+    - name: Install dependencies
       run: |
         pip install build twine
     
@@ -118,6 +118,9 @@ jobs:
       with:
         name: dist
         path: dist/
+    
+    - name: Install twine
+      run: pip install twine
     
     - name: Publish to PyPI
       env:
