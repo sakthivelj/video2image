@@ -1,96 +1,84 @@
 # video2image
 
-[![PyPI version](https://badge.fury.io/py/video2image.svg)](https://pypi.org/project/video2image/)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://github.com/sakthivelj/video2image/actions/workflows/python-publish.yml/badge.svg)](https://github.com/sakthivelj/video2image/actions/workflows/python-publish.yml)
-[![GitHub stars](https://img.shields.io/github/stars/sakthivelj/video2image?style=social)](https://github.com/sakthivelj/video2image/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/sakthivelj/video2image?style=social)](https://github.com/sakthivelj/video2image/network/members)
+**Photogrammetry-focused video frame extractor** — A desktop GUI application to extract frames from video files for 3D reconstruction, photogrammetry, and computer vision workflows.
 
-Video2Image is a Python command-line tool that extracts frames from video files and saves them as individual images. It supports batch processing of multiple video files and provides a progress bar for tracking extraction status.
+[![Release](https://img.shields.io/github/v/release/sakthivelj/video2image)](https://github.com/sakthivelj/video2image/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**Features:**
-- Extract frames from single video or batch process entire directories
-- Support for multiple video formats (MP4, MKV, AVI, MOV)
-- Output in JPG or PNG format
-- Progress bar with frame count display
-- Automatic output folder creation
+## Download
 
-## Installation
+**[⬇ Download video2image-gui.exe](https://github.com/sakthivelj/video2image/releases/latest)** (Windows)
+
+## Features
+
+- **Key Frame Extraction** — Extract only visually distinct frames, ideal for photogrammetry
+- **Scene Detection** — Automatically capture frames at significant visual changes
+- **Motion-based Extraction** — Extract frames with significant motion
+- **Duplicate Removal** — Skip near-identical frames
+- **Frame Control** — Step interval, time range, frame range
+- **Output Control** — JPG/PNG, quality sliders, resize, grayscale, custom naming
+- **Batch Processing** — Process entire folders, recursive scan, parallel execution
+- **Video Info** — Auto-displays duration, FPS, frame count, resolution
+- **Dark Theme** — Modern Catppuccin-inspired interface
+
+## Screenshot
+
+*Coming soon — run the app to see the interface*
+
+## Quick Start
+
+### Option 1: Download the `.exe` (Recommended)
+
+1. Go to [Releases](https://github.com/sakthivelj/video2image/releases/latest)
+2. Download `video2image-gui.exe`
+3. Double-click to run — no installation required
+
+### Option 2: Run from Source
 
 ```bash
-pip install video2image
+git clone https://github.com/sakthivelj/video2image.git
+cd video2image
+git checkout develop
+pip install -r requirements.txt
+python main.py
 ```
 
 ## Usage
 
-### Extract frames from a single video
+1. **Select a video** — Click "📁 File" or drag a video file
+2. **Configure extraction** — Set frame step, enable key frame mode, etc.
+3. **Click "Extract Frames"** — Frames are saved to the output folder
+
+### For Photogrammetry
+
+Enable **Key Frame Extraction** for best results. This combines scene detection with duplicate removal to extract only unique viewpoints — exactly what photogrammetry software needs.
+
+**Compatible with:** Meshroom, COLMAP, Reality Capture, Agisoft Metashape, 3DF Zephyr
+
+## Batch Processing
+
+Use the **Export** menu to configure:
+- **Recursive Folder Scan** — Process videos in subdirectories
+- **Parallel Processing** — Process multiple videos simultaneously
+- **Max Workers** — Control parallel threads (1–16)
+
+## Documentation
+
+See the [Wiki](https://github.com/sakthivelj/video2image/wiki) for:
+- [Installation Guide](https://github.com/sakthivelj/video2image/wiki/Installation)
+- [Usage Guide](https://github.com/sakthivelj/video2image/wiki/Usage-Guide)
+- [Photogrammetry Guide](https://github.com/sakthivelj/video2image/wiki/Photogrammetry-Guide)
+
+## Build from Source
 
 ```bash
-video2image -i /path/to/video.mp4 -o /path/to/output/folder
+pip install -r requirements.txt
+pip install pyinstaller
+pyinstaller --onefile --windowed --name video2image-gui main.py
 ```
 
-### Extract frames from all videos in a directory
-
-```bash
-video2image -i /path/to/video/directory -o /path/to/output/folder
-```
-
-### Command-line options
-
-| Option | Description |
-|--------|-------------|
-| `-i, --input` | Path to input video file or directory (required) |
-| `-o, --output` | Path to output directory (default: same as input) |
-| `-p, --parent` | Include parent directory in output path |
-| `-f, --format` | Image format: `jpg` or `png` (default: jpg) |
-| `-H, --show-help` | Show help message |
-
-### Examples
-
-```bash
-# Extract frames as PNG
-video2image -i video.mp4 -o ./frames -f png
-
-# Extract with parent directory structure
-video2image -i /videos/project1/clip.mp4 -o /output -p
-
-# Process all videos in current directory
-video2image -i . -o ./extracted_frames
-```
-
-## Building from Source
-
-```bash
-# Clone the repository
-git clone https://github.com/sakthivelj/video2image.git
-cd video2image
-
-# Create virtual environment (optional)
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or: venv\Scripts\activate  # Windows
-
-# Install in development mode
-pip install -e .
-```
-
-## Requirements
-
-- Python 3.8+
-- opencv-python
-- tqdm
+The `.exe` will be in the `dist/` folder.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Author
-
-**Sakthivel J** - [sakthivel1023@gmail.com](mailto:sakthivel1023@gmail.com)
-
-## Links
-
-- [PyPI Package](https://pypi.org/project/video2image/)
-- [GitHub Repository](https://github.com/sakthivelj/video2image)
-- [Report Issues](https://github.com/sakthivelj/video2image/issues)
+[MIT License](LICENSE) — © 2024 Sakthivel J

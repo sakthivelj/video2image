@@ -1,0 +1,127 @@
+name: GUI Release (Windows/Linux/macOS)
+
+on:
+  push:
+    tags:
+      - 'v*'
+      - '[0-9]*.[0-9]*.[0-9]*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gui-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.event_name == 'workflow_dispatch' || github.ref_type == 'tag'
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: windows-x64
+            runner: windows-latest
+            os_family: windows
+          - id: linux-x64
+            runner: ubuntu-latest
+            os_family: linux
+            arch: x64
+          - id: linux-arm64
+            runner: ubuntu-24.04-arm
+            os_family: linux
+            arch: arm64
+          - id: macos-x64
+            runner: macos-13
+            os_family: macos
+            arch: x64
+          - id: macos-arm64
+            runner: macos-14
+            os_family: macos
+            arch: arm64
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install -r requirements.txt
+        python -m pip install pyinstaller==6.15.0
+
+    - name: Set version label
+      shell: pwsh
+      run: |
+        if ("${{ github.ref_type }}" -eq "tag") {
+          $version = "${{ github.ref_name }}"
+        } else {
+          $version = "dev-$("${{ github.sha }}".Substring(0,7))"
+        }
+        Add-Content -Path $env:GITHUB_ENV -Value "VERSION_LABEL=$version"
+        Set-Content -Path VERSION -Value $version -NoNewline
+
+    - name: Build (Windows)
+      if: matrix.os_family == 'windows'
+      run: |
+        pyinstaller --onefile --windowed --name video2image-gui --icon=logo.ico --add-data "logo.png;." --add-data "VERSION;." --paths=. --exclude-module torch --exclude-module matplotlib --exclude-module scipy --exclude-module pygame --exclude-module PIL --exclude-module tensorboard main.py
+
+    - name: Build (Linux)
+      if: matrix.os_family == 'linux'
+      run: |
+        pyinstaller --onefile --name video2image-gui --add-data "logo.png:." --add-data "VERSION:." --paths=. --exclude-module torch --exclude-module matplotlib --exclude-module scipy --exclude-module pygame --exclude-module PIL --exclude-module tensorboard main.py
+
+    - name: Build (macOS)
+      if: matrix.os_family == 'macos'
+      run: |
+        pyinstaller --onefile --windowed --name video2image-gui --icon=logo.icns --add-data "logo.png:." --add-data "VERSION:." --paths=. --exclude-module torch --exclude-module matplotlib --exclude-module scipy --exclude-module pygame --exclude-module PIL --exclude-module tensorboard main.py
+
+    - name: Package artifact (Windows)
+      if: matrix.os_family == 'windows'
+      shell: pwsh
+      run: |
+        $name = "video2image-gui-$env:VERSION_LABEL-windows-x64.exe"
+        Copy-Item "dist/video2image-gui.exe" "dist/$name"
+        Add-Content -Path $env:GITHUB_ENV -Value "ARTIFACT_PATH=dist/$name"
+        Add-Content -Path $env:GITHUB_ENV -Value "ARTIFACT_NAME=$name"
+
+    - name: Package artifact (Linux)
+      if: matrix.os_family == 'linux'
+      shell: bash
+      run: |
+        name="video2image-gui-${VERSION_LABEL}-linux-${{ matrix.arch }}"
+        mv "dist/video2image-gui" "dist/$name"
+        chmod +x "dist/$name"
+        echo "ARTIFACT_PATH=dist/$name" >> "$GITHUB_ENV"
+        echo "ARTIFACT_NAME=$name" >> "$GITHUB_ENV"
+
+    - name: Package artifact (macOS)
+      if: matrix.os_family == 'macos'
+      shell: bash
+      run: |
+        name="video2image-gui-${VERSION_LABEL}-macos-${{ matrix.arch }}.zip"
+        cd dist
+        ditto -c -k --sequesterRsrc --keepParent video2image-gui.app "$name"
+        cd ..
+        echo "ARTIFACT_PATH=dist/$name" >> "$GITHUB_ENV"
+        echo "ARTIFACT_NAME=$name" >> "$GITHUB_ENV"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ${{ env.ARTIFACT_PATH }}
+
+    - name: Create GitHub Release
+      if: github.ref_type == 'tag'
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ${{ env.ARTIFACT_PATH }}
+        generate_release_notes: true
