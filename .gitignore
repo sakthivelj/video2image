@@ -6,37 +6,44 @@ venv/
 __pycache__/
 .mypy_cache/
 .pytest_cache/
-dist/
-build/
+.julia/
+zig*/
 target/
 .gradle/
 
-# Compiled files
+# Build artifacts
+dist/
+build/
 *.pyc
 *.class
 *.o
+*.obj
+*.out
 *.exe
 *.dll
 *.so
 *.a
-*.obj
-*.out
 
-# Editor/IDE files
-.vscode/
-.idea/
+# Logs and temp files
+*.log
+*.tmp
 *.swp
 *.swo
-*.tmp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
 
 # System files
 .DS_Store
 Thumbs.db
-.env
-*.env.*
 
-# Logs and coverage
-*.log
+# Coverage
 coverage/
 htmlcov/
 .coverage
