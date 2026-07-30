@@ -1,1 +1,4 @@
-Nothing needs to be added to .gitignore since the only change is a modified Python test file (`tests/test_converter.py`) which is source code and should not be ignored.
+```
+__pycache__/
+*.pyc
+```
