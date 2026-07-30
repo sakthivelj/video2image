@@ -1,13 +1,14 @@
 import argparse
-import os
 import glob
+import os
+
 from .converter import (
+    DEFAULT_CONFIG_PATH,
     extract_frames,
     extract_frames_batch,
     find_videos_recursive,
     load_config,
     save_config,
-    DEFAULT_CONFIG_PATH,
 )
 
 
