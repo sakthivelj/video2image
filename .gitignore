@@ -1,1 +1,1 @@
-Nothing should be ignored based on the provided file changes. The only modified file is `.github/workflows/ci.yml`, which is a YAML configuration file for GitHub Actions workflow and should not be ignored.
+Nothing should be ignored based on the provided file changes. The only modified file is `.github/workflows/ci.yml`, which is a YAML configuration file for GitHub Actions workflow. This is a source/config file that should not be ignored.
