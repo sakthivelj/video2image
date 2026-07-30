@@ -10,10 +10,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-# Add parent directory to path for imports
+# Add parent directory to path for imports (must be before other imports)
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from video2image.converter import (
+from video2image.converter import (  # noqa: E402
     calculate_frame_hash,
     detect_scene_change,
     extract_frames,
