@@ -20,7 +20,7 @@ from video2image.converter import (  # noqa: E402
     extract_frames_batch,
     find_videos_recursive,
     load_config,
-    save_config
+    save_config,
 )
 
 
@@ -30,7 +30,7 @@ class TestFrameExtraction(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures."""
         self.temp_dir = tempfile.mkdtemp()
-        self.output_dir = os.path.join(self.temp_dir, 'output')
+        self.output_dir = os.path.join(self.temp_dir, "output")
 
     def tearDown(self):
         """Clean up test fixtures."""
@@ -55,17 +55,17 @@ class TestFrameExtraction(unittest.TestCase):
         sig = inspect.signature(extract_frames)
         params = list(sig.parameters.keys())
 
-        self.assertIn('start_time', params)
-        self.assertIn('end_time', params)
+        self.assertIn("start_time", params)
+        self.assertIn("end_time", params)
 
     def test_naming_pattern(self):
         """Test custom naming pattern parameter."""
         sig = inspect.signature(extract_frames)
         params = list(sig.parameters.keys())
 
-        self.assertIn('naming_pattern', params)
-        self.assertIn('prefix', params)
-        self.assertIn('suffix', params)
+        self.assertIn("naming_pattern", params)
+        self.assertIn("prefix", params)
+        self.assertIn("suffix", params)
 
 
 class TestImageQuality(unittest.TestCase):
@@ -76,29 +76,29 @@ class TestImageQuality(unittest.TestCase):
         sig = inspect.signature(extract_frames)
         params = list(sig.parameters.keys())
 
-        self.assertIn('jpeg_quality', params)
+        self.assertIn("jpeg_quality", params)
 
     def test_png_compression_parameter(self):
         """Test PNG compression parameter."""
         sig = inspect.signature(extract_frames)
         params = list(sig.parameters.keys())
 
-        self.assertIn('png_compression', params)
+        self.assertIn("png_compression", params)
 
     def test_resize_parameters(self):
         """Test resize parameters."""
         sig = inspect.signature(extract_frames)
         params = list(sig.parameters.keys())
 
-        self.assertIn('resize_width', params)
-        self.assertIn('resize_height', params)
+        self.assertIn("resize_width", params)
+        self.assertIn("resize_height", params)
 
     def test_grayscale_parameter(self):
         """Test grayscale parameter."""
         sig = inspect.signature(extract_frames)
         params = list(sig.parameters.keys())
 
-        self.assertIn('grayscale', params)
+        self.assertIn("grayscale", params)
 
 
 class TestSmartFeatures(unittest.TestCase):
@@ -164,7 +164,7 @@ class TestConfiguration(unittest.TestCase):
 
     def setUp(self):
         """Set up test config."""
-        self.test_config_path = tempfile.mktemp(suffix='.yaml')
+        self.test_config_path = tempfile.mktemp(suffix=".yaml")
 
     def tearDown(self):
         """Clean up test config."""
@@ -173,11 +173,7 @@ class TestConfiguration(unittest.TestCase):
 
     def test_save_config(self):
         """Test saving configuration."""
-        config = {
-            'frame_step': 5,
-            'jpeg_quality': 90,
-            'scene_detection': True
-        }
+        config = {"frame_step": 5, "jpeg_quality": 90, "scene_detection": True}
 
         save_config(config, self.test_config_path)
 
@@ -186,20 +182,17 @@ class TestConfiguration(unittest.TestCase):
 
     def test_load_config(self):
         """Test loading configuration."""
-        config = {
-            'frame_step': 3,
-            'jpeg_quality': 85
-        }
+        config = {"frame_step": 3, "jpeg_quality": 85}
 
         save_config(config, self.test_config_path)
         loaded = load_config(self.test_config_path)
 
-        self.assertEqual(loaded['frame_step'], 3)
-        self.assertEqual(loaded['jpeg_quality'], 85)
+        self.assertEqual(loaded["frame_step"], 3)
+        self.assertEqual(loaded["jpeg_quality"], 85)
 
     def test_load_nonexistent_config(self):
         """Test loading nonexistent config returns empty dict."""
-        config = load_config('/nonexistent/path/config.yaml')
+        config = load_config("/nonexistent/path/config.yaml")
         self.assertEqual(config, {})
 
 
@@ -211,15 +204,11 @@ class TestNamingPatterns(unittest.TestCase):
         # Test pattern formatting manually
         pattern = "{video}_{frame:04d}_{time}"
 
-        result = pattern.format(
-            video="test_video",
-            frame=42,
-            time="1.234"
-        )
+        result = pattern.format(video="test_video", frame=42, time="1.234")
 
         expected = "test_video_0042_1.234"
         self.assertEqual(result, expected)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

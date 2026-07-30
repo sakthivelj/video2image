@@ -21,7 +21,7 @@ def load_config(config_path=None):
         config_path = Path(config_path)
 
     if config_path.exists():
-        with open(config_path, 'r') as f:
+        with open(config_path, "r") as f:
             return yaml.safe_load(f) or {}
     return {}
 
@@ -34,7 +34,7 @@ def save_config(config, config_path=None):
         config_path = Path(config_path)
 
     config_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(config_path, 'w') as f:
+    with open(config_path, "w") as f:
         yaml.safe_dump(config, f, default_flow_style=False)
 
 
@@ -77,19 +77,37 @@ def calculate_motion_score(frame1, frame2):
     return np.mean(magnitude)
 
 
-def extract_frames(video_path, output_folder, include_parent=False, image_format="jpg",
-                   # Frame Control
-                   frame_step=1, start_time=None, end_time=None, frame_range=None,
-                   # Naming Customization
-                   naming_pattern=None, prefix="", suffix="", include_timestamp=False,
-                   # Image Quality
-                   jpeg_quality=95, png_compression=6, resize_width=None, resize_height=None,
-                   grayscale=False,
-                   # Smart Features
-                   scene_detection=False, scene_threshold=30, motion_based=False,
-                   motion_threshold=5, remove_duplicates=False, duplicate_threshold=0.95,
-                   # Config
-                   config_path=None):
+def extract_frames(
+    video_path,
+    output_folder,
+    include_parent=False,
+    image_format="jpg",
+    # Frame Control
+    frame_step=1,
+    start_time=None,
+    end_time=None,
+    frame_range=None,
+    # Naming Customization
+    naming_pattern=None,
+    prefix="",
+    suffix="",
+    include_timestamp=False,
+    # Image Quality
+    jpeg_quality=95,
+    png_compression=6,
+    resize_width=None,
+    resize_height=None,
+    grayscale=False,
+    # Smart Features
+    scene_detection=False,
+    scene_threshold=30,
+    motion_based=False,
+    motion_threshold=5,
+    remove_duplicates=False,
+    duplicate_threshold=0.95,
+    # Config
+    config_path=None,
+):
     """
     Extract frames from video with advanced options.
 
@@ -127,7 +145,9 @@ def extract_frames(video_path, output_folder, include_parent=False, image_format
 
     if include_parent:
         parent_folder = os.path.dirname(video_path)
-        frame_folder = os.path.join(output_folder, os.path.basename(parent_folder), video_name)
+        frame_folder = os.path.join(
+            output_folder, os.path.basename(parent_folder), video_name
+        )
     else:
         frame_folder = os.path.join(output_folder, video_name)
 
@@ -146,7 +166,10 @@ def extract_frames(video_path, output_folder, include_parent=False, image_format
     fps = video.get(cv2.CAP_PROP_FPS)
     frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
     duration = frame_count / fps if fps > 0 else 0
-    video_size = (int(video.get(cv2.CAP_PROP_FRAME_WIDTH)), int(video.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+    video_size = (
+        int(video.get(cv2.CAP_PROP_FRAME_WIDTH)),
+        int(video.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+    )
 
     print("Video Details:")
     print(f"  Format: {video.get(cv2.CAP_PROP_FORMAT)}")
@@ -167,7 +190,9 @@ def extract_frames(video_path, output_folder, include_parent=False, image_format
 
     if frame_range is not None:
         start_frame = max(start_frame, frame_range[0])
-        end_frame = min(end_frame, frame_range[1] if len(frame_range) > 1 else frame_count)
+        end_frame = min(
+            end_frame, frame_range[1] if len(frame_range) > 1 else frame_count
+        )
 
     # Set up progress bar
     total_frames = (end_frame - start_frame) // frame_step
@@ -243,10 +268,14 @@ def extract_frames(video_path, output_folder, include_parent=False, image_format
                 video=video_name,
                 frame=current_frame,
                 time=f"{timestamp:.3f}",
-                datetime=datetime.now().strftime("%Y%m%d_%H%M%S")
+                datetime=datetime.now().strftime("%Y%m%d_%H%M%S"),
             )
         else:
-            timestamp_str = f"_{datetime.now().strftime('%Y%m%d_%H%M%S')}" if include_timestamp else ""
+            timestamp_str = (
+                f"_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+                if include_timestamp
+                else ""
+            )
             filename = f"{prefix}frame_{current_frame:04d}{suffix}{timestamp_str}"
 
         filename = f"{filename}.{image_format}"
@@ -254,9 +283,15 @@ def extract_frames(video_path, output_folder, include_parent=False, image_format
 
         # Save frame with quality settings
         if image_format.lower() == "jpg":
-            cv2.imwrite(frame_path, processed_frame, [cv2.IMWRITE_JPEG_QUALITY, jpeg_quality])
+            cv2.imwrite(
+                frame_path, processed_frame, [cv2.IMWRITE_JPEG_QUALITY, jpeg_quality]
+            )
         elif image_format.lower() == "png":
-            cv2.imwrite(frame_path, processed_frame, [cv2.IMWRITE_PNG_COMPRESSION, png_compression])
+            cv2.imwrite(
+                frame_path,
+                processed_frame,
+                [cv2.IMWRITE_PNG_COMPRESSION, png_compression],
+            )
         else:
             cv2.imwrite(frame_path, processed_frame)
 
@@ -293,8 +328,8 @@ def extract_frames_batch(video_files, output_folder, **kwargs):
             return {"video": video_path, "error": str(e), "success": False}
 
     # Use parallel processing if requested
-    parallel = kwargs.pop('parallel', False)
-    max_workers = kwargs.pop('max_workers', 4)
+    parallel = kwargs.pop("parallel", False)
+    max_workers = kwargs.pop("max_workers", 4)
 
     if parallel:
         with ProcessPoolExecutor(max_workers=max_workers) as executor:
