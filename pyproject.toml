@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "video2image"
-version = "1.3.3"
-description = "A Python script to extract frames from video files."
+version = "1.4.0"
+description = "A Python script to extract frames from video files with advanced features."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
@@ -28,6 +28,8 @@ classifiers = [
 dependencies = [
     "opencv-python",
     "tqdm",
+    "pyyaml",
+    "numpy",
 ]
 
 [project.urls]
