@@ -1,0 +1,2 @@
+[console_scripts]
+video2image = video2image.__init__:main
