@@ -1,0 +1,28 @@
+Video2Image v2.0.0
+===================
+
+Highlights
+----------
+- New standalone desktop GUI (PyQt6) for extracting frames from video —
+  no command line required. Entry point: main.py / video2image/gui.py.
+- App branding wired up end-to-end: window title is now simply
+  "Video2Image", with the logo shown in the title bar and, on Windows,
+  the taskbar (fixed a bug where the taskbar fell back to the generic
+  Python icon instead of the app's own icon).
+- App version is resolved dynamically (from a CI-generated VERSION file
+  in packaged builds, falling back to `git describe` when run from
+  source) instead of being hardcoded in the source.
+- UI clarity pass: replaced the warning-style "!" badges with a proper
+  "i" info glyph on every field, and the progress bar no longer shows a
+  misleading "0%" before an extraction has actually started.
+- About dialog now includes a contact email (sakthivel1023@gmail.com)
+  alongside the GitHub repository link.
+- Release builds now cover Windows (x64), Linux (x64, arm64), and macOS
+  (Intel, Apple Silicon) via a single GitHub Actions matrix
+  (.github/workflows/gui-release.yml), each producing a packaged
+  artifact attached to the GitHub Release for this tag.
+
+Contact
+-------
+Sakthivel J — sakthivel1023@gmail.com
+https://github.com/sakthivelj/video2image
