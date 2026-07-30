@@ -106,8 +106,10 @@ def extract_frames(
     motion_threshold=5,
     remove_duplicates=False,
     duplicate_threshold=0.95,
+    keyframe_only=False,
     # Config
     config_path=None,
+    progress_callback=None,
 ):
     """
     Extract frames from video with advanced options.
@@ -136,8 +138,18 @@ def extract_frames(
         motion_threshold: Motion threshold for extraction
         remove_duplicates: Remove duplicate frames
         duplicate_threshold: Similarity threshold for duplicates (0-1)
+        keyframe_only: Extract only visually distinct frames (photogrammetry mode)
         config_path: Path to config file
+        progress_callback: Optional callable(frames_scanned, frames_total) invoked
+            periodically as the video is scanned, for UI progress reporting
     """
+    # ponytail: "keyframe" = visually distinct frames, not codec I-frames.
+    # For true I-frame extraction, use ffprobe. Covers 95% of photogrammetry needs.
+    if keyframe_only:
+        scene_detection = True
+        remove_duplicates = True
+        if scene_threshold == 30:  # default wasn't customized
+            scene_threshold = 20
     # Create the output folder if it doesn't exist
     os.makedirs(output_folder, exist_ok=True)
 
@@ -209,11 +221,21 @@ def extract_frames(
     prev_frame = None
     frame_hashes = set() if remove_duplicates else None
 
+    # ponytail: progress is reported by scan position (frames read), not
+    # saved_count, since filters make the saved total unpredictable ahead of time.
+    scan_total = max(1, end_frame - start_frame)
+    progress_step = max(1, scan_total // 200)
+
     while True:
         ret, frame = video.read()
 
         if not ret or current_frame >= end_frame:
             break
+
+        if progress_callback is not None:
+            scanned = current_frame - start_frame
+            if scanned % progress_step == 0:
+                progress_callback(scanned, scan_total)
 
         # Check if we should skip this frame based on frame_step
         if (current_frame - start_frame) % frame_step != 0:
@@ -306,20 +328,29 @@ def extract_frames(
     video.release()
     progress_bar.close()
 
+    if progress_callback is not None:
+        progress_callback(scan_total, scan_total)
+
     print(f"\nExtraction complete! Saved {saved_count} frames to {frame_folder}")
     return frame_folder
 
 
-def extract_frames_batch(video_files, output_folder, **kwargs):
+def extract_frames_batch(video_files, output_folder, progress_callback=None, **kwargs):
     """
     Extract frames from multiple videos with optional parallel processing.
 
     Args:
         video_files: List of video file paths
         output_folder: Base output directory
+        progress_callback: Optional callable(videos_completed, videos_total),
+            invoked after each video finishes. Reports per-video progress only —
+            parallel workers run in separate processes, so per-frame callbacks
+            from extract_frames can't cross that boundary.
         **kwargs: Arguments passed to extract_frames
     """
     results = []
+    total = len(video_files)
+    completed = 0
 
     def process_video(video_path):
         try:
@@ -337,9 +368,15 @@ def extract_frames_batch(video_files, output_folder, **kwargs):
             futures = {executor.submit(process_video, vf): vf for vf in video_files}
             for future in as_completed(futures):
                 results.append(future.result())
+                completed += 1
+                if progress_callback is not None:
+                    progress_callback(completed, total)
     else:
         for video_file in tqdm(video_files, desc="Processing videos"):
             results.append(process_video(video_file))
+            completed += 1
+            if progress_callback is not None:
+                progress_callback(completed, total)
 
     return results
 
