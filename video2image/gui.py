@@ -1357,7 +1357,7 @@ class MainWindow(QMainWindow):
         QMessageBox.about(
             self,
             "About Video2Image",
-            f"<h3>Video2Image v{VERSION}</h3>"
+            f"<h3>Video2Image {VERSION}</h3>"
             "<p>Photogrammetry-focused video frame extractor.</p>"
             "<p>Designed for 3D reconstruction pipelines (COLMAP, Meshroom, Reality Capture).</p>"
             "<hr>"
