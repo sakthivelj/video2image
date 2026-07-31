@@ -23,8 +23,8 @@
 git clone https://github.com/sakthivelj/video2image.git
 cd video2image
 
-# Switch to the develop branch
-git checkout develop
+# Switch to the master branch
+git checkout master
 
 # Install dependencies
 pip install -r requirements.txt

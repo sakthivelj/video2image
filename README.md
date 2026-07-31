@@ -38,7 +38,7 @@
 ```bash
 git clone https://github.com/sakthivelj/video2image.git
 cd video2image
-git checkout develop
+git checkout master
 pip install -r requirements.txt
 python main.py
 ```
