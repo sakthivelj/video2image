@@ -1,3 +1,21 @@
+Video2Image v2.0.2
+===================
+
+Changes
+-------
+- Removed the macOS Intel (x64) build from the release matrix — only
+  Apple Silicon (arm64) is built for macOS going forward. Windows and
+  Linux (x64, arm64) builds are unchanged.
+- Fixed leftover references to the old "develop" branch in the README
+  and wiki Installation guide; both now point to "master", matching
+  the branch actually used for development.
+
+Contact
+-------
+Sakthivel J — sakthivel1023@gmail.com
+https://github.com/sakthivelj/video2image
+
+
 Video2Image v2.0.1
 ===================
 
