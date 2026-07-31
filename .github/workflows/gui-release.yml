@@ -33,10 +33,6 @@ jobs:
             runner: ubuntu-24.04-arm
             os_family: linux
             arch: arm64
-          - id: macos-x64
-            runner: macos-13
-            os_family: macos
-            arch: x64
           - id: macos-arm64
             runner: macos-14
             os_family: macos
